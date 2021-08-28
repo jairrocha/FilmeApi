@@ -1,4 +1,5 @@
-﻿using FilmeAPI.Models;
+﻿using FilmeAPI.Data;
+using FilmeAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -12,41 +13,47 @@ namespace FilmeAPI.Controllers
     public class FilmeController : Controller
     {
 
-        private static List<Filme> filmes = new List<Filme>();
-        private static int id = 1;
+        private FilmeContext _context;
+
 
         /*
          * IActionResult utilizado nas respostas http exemplo: (200, 404, 201, ...)
          */
 
+        public FilmeController(FilmeContext context)
+        {
+            _context = context;
+        }
+
 
         [HttpPost]
         public IActionResult AdicionaFilme([FromBody] Filme filme)
         {
-            filme.Id = id++;
-            filmes.Add(filme);
 
-           /*
-            * Quando criamos um recurso novo no sistema através do verbo POST, a convenção 
-            * do que deve ser retornado caso a requisição tenha sido efetuada com sucesso
-            * é: 201 (Created) e a localização de onde o recurso pode ser acessado no nosso sistema.
-            * 
-            * O retorno atende essa convenção.
-            */
+
+            /*
+             * Quando criamos um recurso novo no sistema através do verbo POST, a convenção 
+             * do que deve ser retornado caso a requisição tenha sido efetuada com sucesso
+             * é: 201 (Created) e a localização de onde o recurso pode ser acessado no nosso sistema.
+             * 
+             * O retorno atende essa convenção.
+             */
+            _context.Add(filme);
+            _context.SaveChanges();
             return CreatedAtAction(nameof(RecuperaFilmePorId), new { ID = filme.Id }, filme);
 
         }
         [HttpGet]
         public IActionResult RecuperaFilmes()
         {
-            return Ok(filmes); /*Retorno ok 200*/
+            return Ok(_context.Filmes); /*Retorno ok 200*/
         }
 
         [HttpGet("{id}")]
         public IActionResult RecuperaFilmePorId(int id)
         {
             
-           Filme filme = filmes.FirstOrDefault(f => f.Id == id);
+           Filme filme = _context.Filmes.FirstOrDefault(f => f.Id == id);
 
             if (filme!=null)
             {
