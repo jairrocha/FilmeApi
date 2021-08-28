@@ -15,25 +15,45 @@ namespace FilmeAPI.Controllers
         private static List<Filme> filmes = new List<Filme>();
         private static int id = 1;
 
+        /*
+         * IActionResult utilizado nas respostas http exemplo: (200, 404, 201, ...)
+         */
+
+
         [HttpPost]
-        public void AdicionaFilme([FromBody] Filme filme)
+        public IActionResult AdicionaFilme([FromBody] Filme filme)
         {
             filme.Id = id++;
             filmes.Add(filme);
 
+           /*
+            * Quando criamos um recurso novo no sistema através do verbo POST, a convenção 
+            * do que deve ser retornado caso a requisição tenha sido efetuada com sucesso
+            * é: 201 (Created) e a localização de onde o recurso pode ser acessado no nosso sistema.
+            * 
+            * O retorno atende essa convenção.
+            */
+            return CreatedAtAction(nameof(RecuperaFilmePorId), new { ID = filme.Id }, filme);
+
         }
         [HttpGet]
-        public IEnumerable<Filme> RecuperaFilmes()
+        public IActionResult RecuperaFilmes()
         {
-            return filmes;
+            return Ok(filmes); /*Retorno ok 200*/
         }
 
         [HttpGet("{id}")]
-        public Filme RecuperaFilmePorId(int id)
+        public IActionResult RecuperaFilmePorId(int id)
         {
             
-           return filmes.FirstOrDefault(f => f.Id == id);
-           
+           Filme filme = filmes.FirstOrDefault(f => f.Id == id);
+
+            if (filme!=null)
+            {
+                return Ok(filme); /*Retorno ok 200*/
+            }
+            return NotFound(); /*Retorno not found (404)*/
+
         }
     }
 }
