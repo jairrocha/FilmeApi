@@ -19,7 +19,6 @@ namespace FilmeAPI.Controllers
         {
 
             filmes.Add(filme);
-            Console.WriteLine(filme.Titulo);
 
         }
     }
