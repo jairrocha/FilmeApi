@@ -1,0 +1,12 @@
+﻿Fonte: Nuget
+
+Microsoft.EntityFrameworkCore 5.0.5
+Microsoft.EntityFrameworkCore.Tools 5.0.5
+Mysql.EntityFrameworkCore 5.0.3
+
+
+Instalando via donet cli
+
+dotnet add package Microsoft.EntityFrameworkCore --version 5.0.5
+dotnet add package Microsoft.EntityFrameworkCore.Tools --version 5.0.5
+dotnet add package MySql.Data.EntityFrameworkCore --version 5.0.3
