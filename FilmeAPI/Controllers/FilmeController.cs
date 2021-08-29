@@ -85,5 +85,23 @@ namespace FilmeAPI.Controllers
             return NoContent();
 
         }
+
+        [HttpDelete("{id}")] //Verbo Htpp de remoção
+        public IActionResult RemoveFilme(int id)
+        {
+            Filme filme = _context.Filmes.FirstOrDefault(f => f.Id == id);
+
+            if (filme == null)
+            {
+                return NotFound();
+            }
+
+            _context.Remove(filme);
+            _context.SaveChanges();
+
+            //No HttpDelete a boa prática é não retornar nada
+            return NoContent();
+
+        }
     }
 }
