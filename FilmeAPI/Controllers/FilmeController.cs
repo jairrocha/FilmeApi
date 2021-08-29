@@ -62,5 +62,28 @@ namespace FilmeAPI.Controllers
             return NotFound(); /*Retorno not found (404)*/
 
         }
+        
+        [HttpPut("{id}")] //Verbo http de Atualização
+        public IActionResult AtualizaFilme(int id, [FromBody] Filme filmenovo)
+        {
+            Filme filme = _context.Filmes.FirstOrDefault(f => f.Id == id);
+
+            if (filme == null)
+            {
+                return NotFound();
+            }
+
+
+            filme.Titulo = filmenovo.Titulo;
+            filme.Diretor = filmenovo.Diretor;
+            filme.Genero = filmenovo.Genero;
+            filme.Duracao = filmenovo.Duracao;
+
+            _context.SaveChanges();
+
+            //No HttpPut a boa prática é não retornar nada
+            return NoContent();
+
+        }
     }
 }
