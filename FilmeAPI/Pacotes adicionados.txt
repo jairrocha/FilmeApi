@@ -10,3 +10,9 @@ Instalando via donet cli
 dotnet add package Microsoft.EntityFrameworkCore --version 5.0.5
 dotnet add package Microsoft.EntityFrameworkCore.Tools --version 5.0.5
 dotnet add package MySql.Data.EntityFrameworkCore --version 5.0.3
+
+
+Extessão: AutoMapper.Extensions.Microsoft.DependencyInjection
+Versão:  8.1.1
+Configuração:
+	Adicionar em servições exemplo: services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

@@ -1,4 +1,6 @@
-﻿using FilmeAPI.Data;
+﻿using AutoMapper;
+using FilmeAPI.Data;
+using FilmeAPI.Data.Dtos;
 using FilmeAPI.Models;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -14,20 +16,21 @@ namespace FilmeAPI.Controllers
     {
 
         private FilmeContext _context;
-
+        private IMapper _mapper;
 
         /*
          * IActionResult utilizado nas respostas http exemplo: (200, 404, 201, ...)
          */
 
-        public FilmeController(FilmeContext context)
+        public FilmeController(FilmeContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
 
 
         [HttpPost]
-        public IActionResult AdicionaFilme([FromBody] Filme filme)
+        public IActionResult AdicionaFilme([FromBody] CreateFilmeDto filmeDto)
         {
 
 
@@ -38,6 +41,21 @@ namespace FilmeAPI.Controllers
              * 
              * O retorno atende essa convenção.
              */
+
+
+
+            // a extenssão Mapper faz o trabalho abaixo
+            //Filme filme = new Filme
+            //{
+
+            //    Titulo = filmeDto.Titulo,
+            //    Genero = filmeDto.Genero,
+            //    Diretor = filmeDto.Diretor,
+            //    Duracao = filmeDto.Duracao
+            //};
+
+            Filme filme = _mapper.Map<Filme>(filmeDto);
+            
             _context.Add(filme);
             _context.SaveChanges();
             return CreatedAtAction(nameof(RecuperaFilmePorId), new { ID = filme.Id }, filme);
@@ -57,14 +75,29 @@ namespace FilmeAPI.Controllers
 
             if (filme!=null)
             {
-                return Ok(filme); /*Retorno ok 200*/
+
+                // a extenssão Mapper faz o trabalho abaixo
+                //ReadFilmeDto filmeDto = new ReadFilmeDto
+                //{
+                //    Titulo = filme.Titulo,
+                //    Diretor = filme.Diretor,
+                //    Genero = filme.Genero,
+                //    Duracao = filme.Duracao,
+                //    HoraDaConsulta = DateTime.Now /*Vantagem do padrão DTO, podemos adicionar informação*/
+
+                //};
+
+                ReadFilmeDto filmeDto = _mapper.Map<ReadFilmeDto>(filme);
+                filmeDto.HoraDaConsulta = DateTime.Now; /*Vantagem do padrão DTO, podemos adicionar informação*/
+
+                return Ok(filmeDto); /*Retorno ok 200*/
             }
             return NotFound(); /*Retorno not found (404)*/
 
         }
         
         [HttpPut("{id}")] //Verbo http de Atualização
-        public IActionResult AtualizaFilme(int id, [FromBody] Filme filmenovo)
+        public IActionResult AtualizaFilme(int id, [FromBody] UpdateFilmeDto filmeDto)
         {
             Filme filme = _context.Filmes.FirstOrDefault(f => f.Id == id);
 
@@ -73,11 +106,13 @@ namespace FilmeAPI.Controllers
                 return NotFound();
             }
 
+            // a extenssão Mapper faz o trabalho abaixo
+            //filme.Titulo = filmeDto.Titulo;
+            //filme.Diretor = filmeDto.Diretor;
+            //filme.Genero = filmeDto.Genero;
+            //filme.Duracao = filmeDto.Duracao;
 
-            filme.Titulo = filmenovo.Titulo;
-            filme.Diretor = filmenovo.Diretor;
-            filme.Genero = filmenovo.Genero;
-            filme.Duracao = filmenovo.Duracao;
+            _mapper.Map(filmeDto, filme);
 
             _context.SaveChanges();
 
