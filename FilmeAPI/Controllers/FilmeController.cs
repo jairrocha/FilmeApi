@@ -2,6 +2,7 @@
 using FilmeAPI.Data;
 using FilmeAPI.Data.Dtos;
 using FilmeAPI.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace FilmeAPI.Controllers
 {
+    [Authorize]
     [ApiController]
     [Route("[controller]")]
     public class FilmeController : Controller
