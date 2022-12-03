@@ -64,7 +64,19 @@ namespace FilmeAPI.Controllers
 
         }
 
- 
-        
+        [HttpGet("Unauthorized")]
+        public IActionResult NaoAutorizado()
+        {
+            return Unauthorized();
+        }
+
+        [HttpGet("forbidden")]
+        public IActionResult AcessoProibido()
+        {
+            return Forbid();
+        }
+
+
+
     }
 }

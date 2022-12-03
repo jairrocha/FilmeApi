@@ -5,7 +5,6 @@ using FilmeAPI.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -57,7 +56,7 @@ namespace FilmeAPI.Controllers
             //};
 
             Filme filme = _mapper.Map<Filme>(filmeDto);
-            
+
             _context.Add(filme);
             _context.SaveChanges();
             return CreatedAtAction(nameof(RecuperaFilmePorId), new { ID = filme.Id }, filme);
@@ -72,10 +71,10 @@ namespace FilmeAPI.Controllers
         [HttpGet("{id}")]
         public IActionResult RecuperaFilmePorId(int id)
         {
-            
-           Filme filme = _context.Filmes.FirstOrDefault(f => f.Id == id);
 
-            if (filme!=null)
+            Filme filme = _context.Filmes.FirstOrDefault(f => f.Id == id);
+
+            if (filme != null)
             {
 
                 // a extenssão Mapper faz o trabalho abaixo
@@ -97,7 +96,7 @@ namespace FilmeAPI.Controllers
             return NotFound(); /*Retorno not found (404)*/
 
         }
-        
+
         [HttpPut("{id}")] //Verbo http de Atualização
         public IActionResult AtualizaFilme(int id, [FromBody] UpdateFilmeDto filmeDto)
         {
@@ -140,5 +139,7 @@ namespace FilmeAPI.Controllers
             return NoContent();
 
         }
+
+      
     }
 }
